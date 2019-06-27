@@ -5,7 +5,7 @@ door2door, the operator of the 'allygator shuttle' service in Berlin, collects t
 For this exercise, we collected a sample of the data lake structure and put it on the `/data` folder.
 
 
-See the [Data Mode](#data-model) section for more information.
+See the [Data Model](#data-model) section for more information.
 
 
 ## Part 1
@@ -42,13 +42,14 @@ All events sent to the stream are JSON strings, of the form:
   "on": "some_entity",
   "at": "2019-05-19T16:02:02Z",
   "data": { /* ... */ },
-  "organization_id": "id-of-organization-that-the-entity-belongs-to"
+  "organization_id": "id-of-organization"
 }
 ```
 
 - `event` indicates the type of event - either an entity has been `create`d or `update`d.
 - `on` indicates the entity type that the event occurred on - see sections below.
 - `data` will be an object containing information about the entity that the event occurred on - see sections below.
+- `organization_id` identifies the organization the event belongs to
 
 
 ## Events on `vehicle`
@@ -56,7 +57,7 @@ All events sent to the stream are JSON strings, of the form:
 Possible events:
 - `register` registers a vehicle
 - `update` updates vehicles location
-- `deregister` after this event occurs, the vehicle will never send further location updates .
+- `deregister` after this event occurs, the vehicle will never send further location updates
 
 When a vehicle event is emitted, the `data` field will look as follows:
 
