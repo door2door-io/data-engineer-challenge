@@ -1,6 +1,6 @@
 # Data Engineer challenge
 
-door2door, the provider of the 'allygator shuttle' service in Berlin, collects the live position of all vehicles in its fleet in real-time via a GPS sensor in each vehicle. These vehicles run in operating periods that are managed by door2door's operators. An API is responsible for collecting information from the vehicles and the operators. An step of the API's processing of this information, is to emit events to a data stream from which another component process and store them in a data lake.
+door2door, the provider of the 'allygator shuttle' service in Berlin, collects the live position of all vehicles in its fleet in real-time via a GPS sensor in each vehicle. These vehicles run in operating periods that are managed by door2door's operators. An API is responsible for collecting information from the vehicles and the operators. A step of the API's processing of this information, is to emit events to a data stream from which another component process and stores them in a data lake.
 
 For this challenge, we collected a sample of the data lake structure and put it on the `/data` folder.
 
@@ -53,9 +53,9 @@ All events are JSON strings, of the form:
 ## Events on `vehicle`
 
 Possible events:
-- `register` add a vehicle to the operating period
+- `register` adds a vehicle to the operating period
 - `update` updates a vehicle location
-- `deregister` remove a vehicle from the operating period. After this event occurs, the vehicle will never send further location updates.
+- `deregister` removes a vehicle from the operating period. After this event occurs, the vehicle will never send further location updates.
 
 When a vehicle event is emitted, the `data` field has the following format:
 
@@ -74,7 +74,7 @@ When a vehicle event is emitted, the `data` field has the following format:
 
 Possible events: `create`, `delete`
 
-When an operator adds or removes a operation period, the `on` field will be set to `operating_period`, and the `data` field will have the following format:
+When an operator adds or removes an operation period, the `on` field will be set to `operating_period`, and the `data` field will have the following format:
 
 ```json5
 {
@@ -87,7 +87,7 @@ When an operator adds or removes a operation period, the `on` field will be set 
 
 ## Technical assumptions
 
-* Your solution is expected to be implemented using one of the following languages: Java or Python. We prefer Python, since it is what we use in door2door, but Java is fine.
+* Your solution is expected to be implemented using one of the following languages: Java or Python. We prefer Python, since it is what we use in door2door.
 * You are free to make use of any framework or library you please, but you must justify your choice.
 
 
