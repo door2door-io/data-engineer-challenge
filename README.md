@@ -12,7 +12,7 @@ See the [Data Model](#data-model) section for more information.
 
 Our BI team was asked the following question from our stakeholders:
 
-* What is the average distance traveled by each vehicles during an operating period?
+* What is the average distance traveled by our vehicles during an operating period?
 
 We would like to ask you to develop a solution that processes information from the files found in `/data`. You must extract the main events that occurred during operating periods, transform and store them in a way that is easy for our analysts to answer the question above.
 
