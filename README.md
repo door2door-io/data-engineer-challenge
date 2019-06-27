@@ -1,8 +1,8 @@
 # Data Engineer challenge
 
-door2door, the operator of the 'allygator shuttle' service in Berlin, collects the live position of all vehicles in its fleet in real-time via a GPS sensor in each vehicle. In order to handle these requests, door2door has an API handling the shifts and vehicle position updates during the ridepooling operations. This API takes care of handling our fleets and save information in its database. Before saving this data, the API emits event to a data stream from where another component saves it to a data lake.
+door2door, the provider of the 'allygator shuttle' service in Berlin, collects the live position of all vehicles in its fleet in real-time via a GPS sensor in each vehicle. These vehicles run in operating periods that are managed by door2door's operators. An API is responsible for collecting information from the vehicles and the operators. An step of the API's processing of this information, is to emit events to a data stream from which another component process and store them in a data lake.
 
-For this exercise, we collected a sample of the data lake structure and put it on the `/data` folder.
+For this challenge, we collected a sample of the data lake structure and put it on the `/data` folder.
 
 
 See the [Data Model](#data-model) section for more information.
@@ -10,35 +10,33 @@ See the [Data Model](#data-model) section for more information.
 
 ## Part 1
 
-Our BI team was requested to answer the following question to our stakeholders:
+Our BI team was asked the following question from our stakeholders:
 
-* What is the average  distance traveled by our vehicles during an operating period?
+* What is the average distance traveled by each vehicles during an operating period?
 
-We would like to ask you to develop a solution that can collect information from the files found in `/data`, extract the main events that occurred during an operation, transform and store them in a way that is easy for our analysts to answer the question above.
+We would like to ask you to develop a solution that processes information from the files found in `/data`. You must extract the main events that occurred during operating periods, transform and store them in a way that is easy for our analysts to answer the question above.
 
-You are free to use any combination of tools along with the necessary instructions for us to execute them. If your solution is setup to run locally, a containerized solution is required.
+You are free to use any combination of tools, but you must provide instructions for us to execute them. If your solution is setup to run locally, it must be containerized.
 
 
 ## Part 2
 
-Due to regulation changes, our clients will have to provide break times for drivers to rest during the operations. During a rest, drivers are unavailable for rides but can still use their cars to move in the city. When vehicles move during a break they will still emit location updates, but those should not be used for the distance computation used in the question answered on `Part 2`.
+Due to regulation changes, our system will have to allow for break times for drivers to rest during the operating period. Drivers can still use their cars to move in the city during a rest and they will still emit location updates, but those should not be used for the distance computation that answers the question asked in `Part 1`.
 
-The events that you worked with are sent from our API to the data lake used for data analysis.
+Based how you modeled your solution for `Part 1`, propose a way of adapting the events in the [Data Model](#data-model) so that during the analysis, the location updates during break times are not considered when the average distance traveled is computed.
 
-Based on the way you modeled your solution in `Part 1`, propose a way of adapting the events so during the analysis the break times are taking in to consideration when the kilometers driven are calculated.
-
-You can suggest changes in the existing ones and addition of new events if needed.
+You can suggest any kind of changes.
 
 
 ## Data Model
 
-The events saved by the API follow at data model needed for the managing the ridepooling operation logic. This model is described below and is not necessarily the most suitable for the data analysis.
+The events stored in the data lake comply to the following data model, which is not the most suitable for the data analysis (you are free to suggest changes).
 
-All events sent to the stream are JSON strings, of the form:
+All events are JSON strings, of the form:
 
 ```json5
 {
-  "event": "create", /* see possible events for each entity below */
+  "event": "create",
   "on": "some_entity",
   "at": "2019-05-19T16:02:02Z",
   "data": { /* ... */ },
@@ -46,8 +44,8 @@ All events sent to the stream are JSON strings, of the form:
 }
 ```
 
-- `event` indicates the type of event - either an entity has been `create`d or `update`d.
-- `on` indicates the entity type that the event occurred on - see sections below.
+- `event` indicates the type of event on the entity - each entity has its own set of events.
+- `on` indicates on which entity the event occurred - see sections below.
 - `data` will be an object containing information about the entity that the event occurred on - see sections below.
 - `organization_id` identifies the organization the event belongs to
 
@@ -55,11 +53,11 @@ All events sent to the stream are JSON strings, of the form:
 ## Events on `vehicle`
 
 Possible events:
-- `register` registers a vehicle
-- `update` updates vehicles location
-- `deregister` after this event occurs, the vehicle will never send further location updates
+- `register` add a vehicle to the operating period
+- `update` updates a vehicle location
+- `deregister` remove a vehicle from the operating period. After this event occurs, the vehicle will never send further location updates.
 
-When a vehicle event is emitted, the `data` field will look as follows:
+When a vehicle event is emitted, the `data` field has the following format:
 
 ```json5
 {
@@ -76,7 +74,7 @@ When a vehicle event is emitted, the `data` field will look as follows:
 
 Possible events: `create`, `delete`
 
-When an admin adds or removes hours of operation for a region, the `on` field will be set to `operating_period`, and the `data` field will look as follows:
+When an operator adds or removes a operation period, the `on` field will be set to `operating_period`, and the `data` field will have the following format:
 
 ```json5
 {
@@ -89,15 +87,15 @@ When an admin adds or removes hours of operation for a region, the `on` field wi
 
 ## Technical assumptions
 
-* Your solution is expected to be implemented using one of the following languages: Java or Python, but we would recommend you to use the latter, since it is the stack you would be using if when join door2door.
-* You are free to make use of any framework or library you please, but you should justify your choice.
+* Your solution is expected to be implemented using one of the following languages: Java or Python. We prefer Python, since it is what we use in door2door, but Java is fine.
+* You are free to make use of any framework or library you please, but you must justify your choice.
 
 
 ## Delivery of your solution
 
-Please deliver your solution to us as a publicly accessible git repository, or in a ZIP file. The repository should contain full instructions for us to run the solution on our own machines.
+Please deliver your solution to us in a git repository or in a ZIP file. You must provide complete instructions for us to run the solution on our own machines. If you choose to use git, make sure the reviewers will be able to access your repository.
 
-If you are able to publicly host the solution somewhere (e.g. Heroku, AWS), make sure the correct access is provided to door2door reviewers.
+With one of the methods of deliver above, you may optionally host the solution on the Internet (e.g. Heroku, AWS). Make sure to provide access to door2door's reviewers.
 
 ## Reviewing
 
@@ -106,7 +104,7 @@ The following description will give you an understanding of how we review the co
 The criteria that we are looking for are the following:
 
 - Documentation: Is the project and the code properly documented?
-- Correctness: Is the task solved? Does the data provided is correctly ingested by solution? If there is anything missing, is the reason why it is missing documented?
+- Correctness: Is the task solved? Is the data provided correctly processed by the solution? If there is anything missing, is the reason why it is missing documented?
 - Technology: Which libraries or approaches are used? Do they make sense for the task? Justify why you've decided to use those technologies to solve the code challenge.
 - Code quality: Is the code understandable and maintainable? What programming paradigm is being used? Is it implemented correctly?
 - Tests: How is the project tested? Does the project contain system and unit tests? Is the entire project tested or just parts of it?
