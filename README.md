@@ -1,3 +1,9 @@
+⚠️⚠️⚠️
+
+Refer to https://github.com/door2door-io/d2d-code-challenges/tree/master/data for an updated version of this challenge.
+
+⚠️⚠️⚠️
+
 # Data Engineer challenge
 
 door2door, the provider of the 'allygator shuttle' service in Berlin, collects the live position of all vehicles in its fleet in real-time via a GPS sensor in each vehicle. These vehicles run in operating periods that are managed by door2door's operators. An API is responsible for collecting information from the vehicles and the operators. A step of the API's processing of this information, is to emit events to a data stream from which another component process and stores them in a data lake.
